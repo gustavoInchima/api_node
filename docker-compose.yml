@@ -1,11 +1,40 @@
 version: "3"
 
 services:
-  api:
-    container_name: api_node
+  mysqldb:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: mysql_dbnode
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_DATABASE: "api_node"
+      MYSQL_USER: "userdb"
+      MYSQL_PASSWORD: "secret_pass"
+    networks:
+      - internalnet
+
+  nodeapi:
+    container_name: node_api
     restart: always
     ports:
-      - "3000:3000"
-    build: ./
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/usr/src/app
+    depends_on:
+      - mysqldb
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge

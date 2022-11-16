@@ -1,17 +1,18 @@
-import express from "express";
-import morgan from "morgan";
+import express from 'express'
+import morgan from 'morgan'
 // Routes
-import homeRoutes from "./routes/home.routes";
+import homeRoutes from './routes/home.routes'
 
-const app = express();
+// App
+const app = express()
 
-// Setting
+// Settings
 
 // Middlewares
-app.use(morgan("dev"));
-app.use(express.json());
+app.use(morgan('dev'))
+app.use(express.json())
 
 // Routes
-app.use("/api/home" ,homeRoutes);
+app.use('/api/home', homeRoutes)
 
-export default app;
+export default app
