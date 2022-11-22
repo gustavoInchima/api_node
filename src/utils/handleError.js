@@ -1,6 +1,8 @@
 const httpError = (res, message = 'error', code = 403) => {
-  res.status(code)
-  res.send({ error: message })
+  res.status(code).json({
+    success: 0,
+    message: message
+  })
 }
 
 module.exports = { httpError }

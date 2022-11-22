@@ -5,7 +5,7 @@ import { httpError } from '../utils/handleError'
 const getAllMessages = async (req, res) => {
   try {
     const allMessages = await homeServices.getAllMessages()
-    res.json(allMessages)
+    res.status(200).json({ success: 1, data: allMessages })
   } catch (error) {
     httpError(res, 'ERROR_LIST_MESSAGES')
   }
@@ -15,7 +15,7 @@ const getOneMessage = async (req, res) => {
   try {
     const { messageId } = req.params
     const message = await homeServices.getOneMessage(messageId)
-    res.status(200).send({ status: 'OK', data: message })
+    res.status(200).json({ success: 1, data: message })
   } catch (error) {
     httpError(res, 'ERROR_GET_MESSAGE')
   }
@@ -25,7 +25,7 @@ const createMessage = (req, res) => {
   try {
     const newMessage = matchedData(req)
     const createdMessage = homeServices.createMessage(newMessage)
-    res.status(201).send({ status: 'OK', data: createdMessage })
+    res.status(201).json({ success: 1, data: createdMessage })
   } catch (error) {
     httpError(res, 'ERROR_CREATE_MESSAGES')
   }
@@ -40,7 +40,7 @@ const updateMessage = async (req, res) => {
       title,
       message
     })
-    res.status(200).send({ status: 'OK', data: updateMessage })
+    res.status(200).json({ success: 1, data: updateMessage })
   } catch (error) {
     httpError(res, 'ERROR_UPDATE_MESSAGES')
   }
@@ -50,7 +50,7 @@ const deleteMessage = async (req, res) => {
   try {
     const { messageId } = req.params
     const deleteMessage = await homeServices.deleteMessage(messageId)
-    res.status(200).send({ status: 'OK', data: deleteMessage })
+    res.status(200).json({ success: 1, data: deleteMessage })
   } catch (error) {
     httpError(res, 'ERROR_DELETE_MESSAGES')
   }
