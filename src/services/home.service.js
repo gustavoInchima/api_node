@@ -6,7 +6,7 @@ const getOneMessage = async (messageId) => messages.getOneMessage(messageId)
 
 const createMessage = (newMessage) => messages.createMessage(newMessage)
 
-const updateMessage = async (data) => messages.updateMessage(data)
+const updateMessage = async (message) => messages.updateMessage(message)
 
 const deleteMessage = async (messageId) => messages.deleteMessage(messageId)
 

@@ -33,20 +33,18 @@ const createMessage = async ({ title, message }) => {
       'INSERT INTO message SET ? ',
       newMessage
     )
-    console.log(result)
     return result
   } catch (error) {
     console.log('error', error)
   }
 }
 
-const updateMessage = async ({ id, title, message }) => {
+const updateMessage = async ({ messageId, title, message }) => {
   try {
-    const lmessage = { title, message }
     const connection = await getConnection()
     const result = await connection.query('UPDATE message SET ? WHERE id = ?', [
-      lmessage,
-      id
+      { title, message },
+      messageId
     ])
     return result
   } catch (error) {

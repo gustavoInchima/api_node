@@ -1,47 +1,59 @@
+import { matchedData } from 'express-validator'
 import { services as homeServices } from '../services/home.service'
+import { httpError } from '../utils/handleError'
 
 const getAllMessages = async (req, res) => {
-  const allMessages = await homeServices.getAllMessages()
-  res.json(allMessages)
+  try {
+    const allMessages = await homeServices.getAllMessages()
+    res.json(allMessages)
+  } catch (error) {
+    httpError(res, 'ERROR_LIST_MESSAGES')
+  }
 }
 
 const getOneMessage = async (req, res) => {
-  const { messageId } = req.params
-  const message = await homeServices.getOneMessage(messageId)
-  res.status(200).send({ status: 'OK', data: message })
+  try {
+    const { messageId } = req.params
+    const message = await homeServices.getOneMessage(messageId)
+    res.status(200).send({ status: 'OK', data: message })
+  } catch (error) {
+    httpError(res, 'ERROR_GET_MESSAGE')
+  }
 }
 
 const createMessage = (req, res) => {
-  const { title, message } = req.body
-
-  if (!title || !message) {
-    res.status(500).json({ error: 'These was an error' })
+  try {
+    const newMessage = matchedData(req)
+    const createdMessage = homeServices.createMessage(newMessage)
+    res.status(201).send({ status: 'OK', data: createdMessage })
+  } catch (error) {
+    httpError(res, 'ERROR_CREATE_MESSAGES')
   }
-
-  const newMessage = { title, message }
-  const createdMessage = homeServices.createMessage(newMessage)
-  res.status(201).send({ status: 'OK', data: createdMessage })
 }
 
 const updateMessage = async (req, res) => {
-  const { messageId } = req.params
-  const { title, message } = req.body
-
-  console.log(messageId, title, message)
-  const updateMessage = await homeServices.updateMessage({
-    id: messageId,
-    title,
-    message
-  })
-  res.status(200).send({ status: 'OK', data: updateMessage })
+  try {
+    const { messageId } = req.params
+    const { title, message } = req.body
+    const updateMessage = await homeServices.updateMessage({
+      messageId,
+      title,
+      message
+    })
+    res.status(200).send({ status: 'OK', data: updateMessage })
+  } catch (error) {
+    httpError(res, 'ERROR_UPDATE_MESSAGES')
+  }
 }
 
 const deleteMessage = async (req, res) => {
-  // const { messageId } = req.params
-  console.log(req.params.messageId)
-
-  const deleteMessage = await homeServices.deleteMessage(req.params.messageId)
-  res.status(200).send({ status: 'OK', data: deleteMessage })
+  try {
+    const { messageId } = req.params
+    const deleteMessage = await homeServices.deleteMessage(messageId)
+    res.status(200).send({ status: 'OK', data: deleteMessage })
+  } catch (error) {
+    httpError(res, 'ERROR_DELETE_MESSAGES')
+  }
 }
 
 export const methods = {
